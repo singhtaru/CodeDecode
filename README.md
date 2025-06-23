@@ -1,5 +1,3 @@
----
-
 # 💡 CodeDecode — AI Code Explainer
 
 **CodeDecode** is a simple, beginner-friendly AI-powered app that explains code snippets in plain English. Paste any code (Python, JavaScript, etc.), and the AI will break it down so even a beginner can understand what's happening under the hood.
@@ -93,5 +91,3 @@ The app will open in your browser at `http://localhost:8501`.
 
 * Powered by **Groq** LLaMA 3.1
 * Built with ❤️ using **Streamlit** and **LangChain**
-
----
