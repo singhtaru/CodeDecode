@@ -12,34 +12,126 @@ groq_api_key=os.getenv("GROQ_API_KEY")
 st.set_page_config(page_title="CodeDecode",page_icon="💡", layout="centered")
 
 # title and description
-st.title("💡 AI Code Explainer ")
-st.markdown("Paste your code below in any language and get an explanation in simple English.")
+st.title("💡CodeDecode-Your AI Code Buddy ")
+st.markdown("Select how you need help in coding.")
+task = st.selectbox("Select Task", ["Explain Code and analyze Complexity", "Debug Code", "Optimize Code","Generate Code","Add Comments","Change Language"])
 
-
+st.divider()
 
 # code input
-code_input=st.text_area("📥 Enter your code below:", height=300, placeholder="e.g., def add(a, b): return a + b")
-if st.button("🧠 Explain Code"):
+code_input=""
+button=False
+if "language" not in st.session_state:
+    st.session_state.language = "Python"
+if task=="Explain Code and analyze Complexity":
+    code_input=st.text_area("📥 Enter your code below:", height=300, placeholder="e.g., def add(a, b): return a + b")
+    button=st.button("🧠 Explain Code and analyze Complexity")
+
+elif task=="Debug Code":
+    code_input=st.text_area("📥 Enter your code below:", height=300, placeholder="e.g., def add(a, b): return a + b")
+    button=st.button("🪲 Debug Code")
+
+elif task=="Optimize Code":
+    code_input=st.text_area("📥 Enter your code below:", height=300, placeholder="e.g., def add(a, b): return a + b")
+    button=st.button("⚡ Optimize Code")
+
+elif task=="Generate Code":
+    code_input=st.text_area("📥 What code do you need help with:", height=300, placeholder="e.g., generate a code to add two strings")
+    button=st.button("✨ Generate Code")
+elif task=="Add Comments":
+    code_input=st.text_area("📥 What code do you need help with:", height=300, placeholder="e.g., def add(a, b): return a + b")
+    button=st.button("💬 Add Comments")
+elif task=="Change Language":
+    st.session_state.language=st.selectbox("Select Language to change to", ["Python", "Java", "C++","C","JavaScript"])
+    code_input=st.text_area("📥 Enter code you want changed:", height=300, placeholder="e.g., def add(a, b): return a + b")
+    button=st.button("🌐 Change Language")
+
+st.divider()
+
+if button:
     if not code_input.strip():
         st.warning("Please paste some code first.")
     else:
-        with st.spinner("Explaining code....."):
+        with st.spinner("Working on it....."):
             llm=ChatGroq(model="llama3-70b-8192",api_key=groq_api_key,temperature=0.4)
-            prompt= PromptTemplate.from_template(template=
-                """
-                You are a highly knowledgeable programming tutor 
-                and you need to help the user understand how 
-                {code_input} 
-                is working in simple English such that
-                even a beginner who has just started coding will
-                be able to understand the code.
-                Identify the errors if any in code and tell how those 
-                errors can be rectified. Also suggest what changes could
-                the user make to make the code better. 
-                """
-            )
+            if task=="Explain Code and analyze Complexity":
+                prompt= PromptTemplate.from_template(template=
+                    """
+                    You are a highly knowledgeable programming tutor 
+                    and you need to help the user understand how 
+                    {code_input} 
+                    is working in simple English such that
+                    even a beginner who has just started coding will
+                    be able to understand the code. Also explain about
+                    the space and time complexity.
+                    """
+                )
+            elif task=="Debug Code":
+                prompt= PromptTemplate.from_template(template=
+                    """
+                    You are a highly knowledgeable programming tutor 
+                    and your role is to identify the errors if any in 
+                    {code_input} 
+                    and tell how those errors can be rectified
+                    in simple English such that even a beginner who has
+                    just started coding will
+                    be able to understand the code.
+                    """
+                )
+            elif task=="Optimize Code":
+                prompt= PromptTemplate.from_template(template=
+                    """
+                    You are a highly knowledgeable programming tutor 
+                    and you need to help the user optimize  
+                    {code_input} 
+                    to make it faster, more efficient, cleaner and 
+                    easier to read while following the best coding practices.
+                    Possibly try altering the time and space complexity of 
+                    the code so that the most efficient solution can be obtained.
+                    """
+                )
+            elif task=="Generate Code":
+                prompt= PromptTemplate.from_template(template=
+                    """
+                    You are a highly knowledgeable programming tutor 
+                    and you need to help the user generate code based on  
+                    {code_input} 
+                    Make the code faster, more efficient, cleaner and 
+                    easier to read while following the best coding practices.
+                    Also after generating code, give explanation about 
+                    how code works line by line and how does it relate 
+                    to problem statement; 
+                    """
+                )
+            elif task=="Add Comments":
+                prompt= PromptTemplate.from_template(template=
+                    """
+                    You are a highly knowledgeable programming tutor 
+                    and you need to help the user add comments to  
+                    {code_input}. 
+                    Ensure that the comments are easy to read and 
+                    understand.
+                    """
+                )
+            elif task=="Change Language":
+                prompt= PromptTemplate.from_template(template=
+                    """
+                    You are a highly knowledgeable programming tutor 
+                    and you need to help the user convert 
+                    {code_input} to '{{st.session_state.language}}' language
+                    Add comments that are easy to read and 
+                    understand. Don't mention anything related to
+                    actual language that user wants to convert to.
+                    """
+                )
+
             chain=prompt | llm
             code_explanation=chain.invoke({"code_input":code_input})
 
             st.subheader("📖 Explanation:")
             st.markdown(code_explanation.content)
+            st.divider()
+
+
+st.markdown("---")
+st.markdown("🔍 Built with LLaMA 3 via Groq | Streamlit UI | By Taru Singh")
