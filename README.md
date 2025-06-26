@@ -75,7 +75,8 @@ streamlit run app.py
 
 ## 📸 Screenshot Preview
 
-![image](https://github.com/user-attachments/assets/f3da41ab-cda6-4983-b8c1-e8f603ffa1df)
+![image](https://github.com/user-attachments/assets/60a11e20-8253-4fe6-bcfa-1ff46d32323b)
+
 
 
 ---
