@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from langchain_groq import ChatGroq #using llama model
 from langchain.prompts import PromptTemplate #making prompt template to model for desired output
 from langchain.chains import  LLMChain #combines prompt and model to create a chain
-
+from streamlit_ace import st_ace # to get code editor
 load_dotenv()
 groq_api_key=os.getenv("GROQ_API_KEY")
 
@@ -21,29 +21,29 @@ st.divider()
 # code input
 code_input=""
 button=False
-if "language" not in st.session_state:
-    st.session_state.language = "Python"
+language=""
 if task=="Explain Code and analyze Complexity":
-    code_input=st.text_area("📥 Enter your code below:", height=300, placeholder="e.g., def add(a, b): return a + b")
+    code_input=st_ace("📥 Enter your code below:", height=300, placeholder="e.g., def add(a, b): return a + b",theme="twilight",font_size=16,auto_update=True)
     button=st.button("🧠 Explain Code and analyze Complexity")
 
 elif task=="Debug Code":
-    code_input=st.text_area("📥 Enter your code below:", height=300, placeholder="e.g., def add(a, b): return a + b")
+    code_input=st_ace("📥 Enter your code below:", height=300, placeholder="e.g., def add(a, b): return a + b",theme="twilight",font_size=16,auto_update=True)
     button=st.button("🪲 Debug Code")
 
 elif task=="Optimize Code":
-    code_input=st.text_area("📥 Enter your code below:", height=300, placeholder="e.g., def add(a, b): return a + b")
+    code_input=st_ace("📥 Enter your code below:", height=300, placeholder="e.g., def add(a, b): return a + b",theme="twilight",font_size=16,auto_update=True)
     button=st.button("⚡ Optimize Code")
 
 elif task=="Generate Code":
+    language = st.text_area("Enter Language you want to generate code in",height=70, placeholder="e.g., Python, C++")
     code_input=st.text_area("📥 What code do you need help with:", height=300, placeholder="e.g., generate a code to add two strings")
     button=st.button("✨ Generate Code")
 elif task=="Add Comments":
-    code_input=st.text_area("📥 What code do you need help with:", height=300, placeholder="e.g., def add(a, b): return a + b")
+    code_input=st_ace("📥 What code do you need help with:", height=300, placeholder="e.g., def add(a, b): return a + b",theme="twilight",font_size=16,auto_update=True)
     button=st.button("💬 Add Comments")
 elif task=="Change Language":
-    st.session_state.language=st.selectbox("Select Language to change to", ["Python", "Java", "C++","C","JavaScript"])
-    code_input=st.text_area("📥 Enter code you want changed:", height=300, placeholder="e.g., def add(a, b): return a + b")
+    language = st.text_area("Enter Language you want to generate code in",height=70, placeholder="e.g., Python, C++")
+    code_input=st_ace("📥 Enter code you want changed:", height=300, placeholder="e.g., def add(a, b): return a + b",theme="twilight",font_size=16,auto_update=True)
     button=st.button("🌐 Change Language")
 
 st.divider()
@@ -95,12 +95,13 @@ if button:
                     """
                     You are a highly knowledgeable programming tutor 
                     and you need to help the user generate code based on  
-                    {code_input} 
+                    {code_input} in {language} language.
                     Make the code faster, more efficient, cleaner and 
                     easier to read while following the best coding practices.
                     Also after generating code, give explanation about 
                     how code works line by line and how does it relate 
-                    to problem statement; 
+                    to problem statement.Don't mention anything related to
+                    actual language that user wants to convert to.
                     """
                 )
             elif task=="Add Comments":
@@ -118,15 +119,16 @@ if button:
                     """
                     You are a highly knowledgeable programming tutor 
                     and you need to help the user convert 
-                    {code_input} to '{{st.session_state.language}}' language
+                    {code_input} to {language} language
                     Add comments that are easy to read and 
-                    understand. Don't mention anything related to
-                    actual language that user wants to convert to.
+                    understand. 
                     """
                 )
+            chain = prompt | llm
+            code_explanation = chain.invoke({"code_input": code_input,"language":language})
 
-            chain=prompt | llm
-            code_explanation=chain.invoke({"code_input":code_input})
+
+
 
             st.subheader("📖 Explanation:")
             st.markdown(code_explanation.content)
