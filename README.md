@@ -40,7 +40,7 @@ Your one-stop AI-powered coding assistant to simplify your coding journey! Wheth
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/yourusername/codedecode.git
+git clone https://github.com/singhtaru/codedecode.git
 cd codedecode
 ```
 
