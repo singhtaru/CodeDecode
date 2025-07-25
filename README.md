@@ -29,6 +29,7 @@ Your one-stop AI-powered coding assistant to simplify your coding journey! Wheth
 * [Streamlit](https://streamlit.io/) — Fast UI development
 * [LangChain](https://www.langchain.com/) — Prompt management
 * [Groq + LLaMA 3](https://groq.com/) — AI model backend
+* [Streamlit Ace Editor](https://github.com/okld/streamlit-ace) — Code editor with syntax highlighting and tab support
 * Python for backend logic
 * Dotenv for secure API key handling
 
@@ -39,7 +40,7 @@ Your one-stop AI-powered coding assistant to simplify your coding journey! Wheth
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/yourusername/codedecode.git
+git clone https://github.com/singhtaru/codedecode.git
 cd codedecode
 ```
 
@@ -74,7 +75,8 @@ streamlit run app.py
 
 ## 📸 Screenshot Preview
 
-![image](https://github.com/user-attachments/assets/f3da41ab-cda6-4983-b8c1-e8f603ffa1df)
+![image](https://github.com/user-attachments/assets/60a11e20-8253-4fe6-bcfa-1ff46d32323b)
+
 
 
 ---
