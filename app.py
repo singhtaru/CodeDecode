@@ -2,7 +2,6 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq #using llama model
-from langchain.prompts import PromptTemplate #making prompt template to model for desired output
 from langchain.chains import  LLMChain #combines prompt and model to create a chain
 from streamlit_ace import st_ace # to get code editor
 load_dotenv()
