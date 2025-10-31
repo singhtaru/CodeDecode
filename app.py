@@ -52,7 +52,7 @@ if button:
         st.warning("Please paste some code first.")
     else:
         with st.spinner("Working on it....."):
-            llm=ChatGroq(model="llama3-70b-8192",api_key=groq_api_key,temperature=0.4)
+            llm=ChatGroq(model="llama-3.3-70b-versatile",api_key=groq_api_key,temperature=0.4)
             if task=="Explain Code and analyze Complexity":
                 prompt= PromptTemplate.from_template(template=
                     """
